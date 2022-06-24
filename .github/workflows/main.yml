@@ -1,0 +1,67 @@
+name: 'Terraform'
+
+on:
+  push:
+    branches:
+    - "main"
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  Deploy-Development:
+    name: 'Deploy to Development'
+    runs-on: ubuntu-latest
+    environment:
+      name: Development
+  
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    # Install the latest version of Terraform CLI1 and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 1.0.9
+    
+
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules1, etc.
+    - name: Terraform Init
+      #run: terraform init
+      env:
+        TF_VAR_access_key: ${{ secrets.access_key }}
+        TF_VAR_secret_key: ${{ secrets.secret_key }}
+      run: terraform init -backend-config="access_key=$TF_VAR_access_key" -backend-config="secret_key=$TF_VAR_secret_key" -backend-config="region=eu-central-1"
+
+    # Checks that all Terraform configuration files adhere to a canonical format
+    #- name: Terraform Format
+     # run: terraform fmt -check
+
+    # Generates an execution plan for Terraform
+    - name: Terraform Plan
+      run: terraform plan -input=false
+      env:
+        TF_VAR_access_key: ${{ secrets.access_key }}
+        TF_VAR_secret_key: ${{ secrets.secret_key }}
+        TF_VAR_databricks_account_id: ${{ secrets.databricks_account_id }}
+        TF_VAR_databricks_account_username: ${{ secrets.databricks_account_username }}
+        TF_VAR_databricks_account_password: ${{ secrets.databricks_account_password }}
+    
+    - name: Terraform Apply
+      env:
+        TF_VAR_access_key: ${{ secrets.access_key }}
+        TF_VAR_secret_key: ${{ secrets.secret_key }}
+        TF_VAR_databricks_account_id: ${{ secrets.databricks_account_id }}
+        TF_VAR_databricks_account_username: ${{ secrets.databricks_account_username }}
+        TF_VAR_databricks_account_password: ${{ secrets.databricks_account_password }}
+      #if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
+      run: terraform apply -input=false -auto-approve
