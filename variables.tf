@@ -4,21 +4,6 @@ variable "aws_region" {
   default = "us-east-1"
 }
 
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 3.27"
-    }
-
-    databricks = {
-      source = "databrickslabs/databricks"
-    }
-  }
-}
-
-
-
 provider "databricks" {
   //profile = var.databricks_connection_profile
   username = "${var.databricks_account_username}"
