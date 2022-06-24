@@ -1,8 +1,4 @@
-variable "aws_region" {
-  description = "The code of the AWS Region to use."
-  type = string
-  default = "us-east-1"
-}
+
 
 provider "databricks" {
   //profile = var.databricks_connection_profile
