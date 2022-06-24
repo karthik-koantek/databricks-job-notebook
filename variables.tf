@@ -1,7 +1,7 @@
 
 
 provider "databricks" {
-  //profile = var.databricks_connection_profile
+  //profile = var.databricks_connection_profile1
   username = "${var.databricks_account_username}"
   password = "${var.databricks_account_password}"
   host = "https://dbc-0fd33528-a348.cloud.databricks.com/"
