@@ -13,6 +13,8 @@ variable "resource_prefix" {
   default = "terraform-demo"
 }
 
+variable "databricks_account_username" {}
+variable "databricks_account_password" {}
 variable "access_key" {}
 variable "secret_key" {}
 variable "region" {
