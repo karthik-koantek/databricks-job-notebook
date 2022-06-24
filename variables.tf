@@ -17,10 +17,7 @@ terraform {
   }
 }
 
-provider "aws" {
-  profile = var.aws_connection_profile
-  region = var.aws_region
-}
+
 
 provider "databricks" {
   //profile = var.databricks_connection_profile
@@ -34,4 +31,11 @@ variable "resource_prefix" {
   type = string
   default = "terraform-demo"
 }
+
+variable "access_key" {}
+variable "secret_key" {}
+variable "region" {
+  default = "eu-central-1"
+}
+
 
